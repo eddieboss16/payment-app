@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 import api from '../services/api';
 
@@ -7,7 +7,7 @@ const AuthContext = createContext();
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const history = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -28,7 +28,7 @@ const AuthProvider = ({ children }) => {
       localStorage.setItem('token', token);
       const decoded = jwtDecode(token);
       setUser({ token, ...decoded });
-      history.push('/dashboard');
+      navigate('/dashboard');
     } catch (error) {
       console.error(error);
     }
@@ -37,7 +37,7 @@ const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('token');
     setUser(null);
-    history.push('/login');
+    navigate('/login');
   };
 
   return (
